@@ -6,6 +6,7 @@ import random
 import time
 
 import board
+import constants
 import digitalio
 import neopixel
 
@@ -30,7 +31,6 @@ def less_brightness(brightness):
 
 
 def main():
-    LEDS_COUNT = 10
     button_a = digitalio.DigitalInOut(board.BUTTON_A)
     button_a.direction = digitalio.Direction.INPUT
     button_a.pull = digitalio.Pull.DOWN
@@ -51,7 +51,7 @@ def main():
             brightness = more_brightness(brightness)
             pixels.brightness = brightness
         if loop % 10 == 0:
-            for led_index in range(LEDS_COUNT):
+            for led_index in range(constants.LEDS_COUNT):
                 color = get_random_color()
                 pixels[led_index] = color
         time.sleep(0.1)

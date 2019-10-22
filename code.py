@@ -3,17 +3,12 @@ import random
 import time
 
 import board
+import constants
 import digitalio
 import neopixel
 import random_colors
 import temperature
-
-# TODO: should be available somewhere in the board
-LEDS_COUNT = 10
-
-
-def minmax(value, minimum=0, maximum=1):
-    return max(min(value, maximum), minimum)
+import utils
 
 
 def get_random_color():
@@ -26,7 +21,7 @@ def get_random_color():
 def show_selection(pixels, selection):
     print('selection: {}'.format(selection))
     rgb_color = get_random_color()
-    for led_index in range(LEDS_COUNT):
+    for led_index in range(constants.LEDS_COUNT):
         pixels[led_index] = (0, 0, 0)
     pixels[selection] = rgb_color
 
@@ -46,7 +41,7 @@ def selection_applied(button_a, button_b):
 
 
 def timed_out(now, start_time, timeout_secounds=5):
-    return now < start_time + timeout_secounds
+    return now > start_time + timeout_secounds
 
 
 def deinit(*digitalio_list):
@@ -69,7 +64,7 @@ def start_program(selection):
 
 
 def main():
-    MAX_PROGRAM = LEDS_COUNT
+    MAX_PROGRAM = constants.LEDS_COUNT
     pixels = neopixel.NeoPixel(
         board.NEOPIXEL, 10, brightness=0.1, auto_write=True)
     button_a = digitalio.DigitalInOut(board.BUTTON_A)
@@ -86,7 +81,7 @@ def main():
             selection_applied(button_a, button_b)):
         previous_selection = selection
         selection += get_selection(button_a, button_b)
-        selection = minmax(selection, 0, MAX_PROGRAM - 1)
+        selection = utils.minmax(selection, 0, MAX_PROGRAM - 1)
         if selection != previous_selection:
             show_selection(pixels, selection)
             start_time = time.monotonic()

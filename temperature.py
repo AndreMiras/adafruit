@@ -4,8 +4,10 @@ import time
 
 import adafruit_thermistor
 import board
+import constants
 import digitalio
 import neopixel
+import utils
 
 
 def get_random_color():
@@ -23,10 +25,6 @@ def color_255to1(color):
     return color / 255.0
 
 
-def minmax(value, minimum=0, maximum=1):
-    return max(min(value, maximum), minimum)
-
-
 def temperature_percent_to_color255(temperature_percent):
     red = color_1to255(temperature_percent)
     green = 0
@@ -35,7 +33,6 @@ def temperature_percent_to_color255(temperature_percent):
 
 
 def main():
-    LEDS_COUNT = 10
     pixels = neopixel.NeoPixel(
         board.NEOPIXEL, 10, brightness=0.1, auto_write=True)
     thermistor = adafruit_thermistor.Thermistor(
@@ -50,13 +47,13 @@ def main():
     temperature_delta_max = 4
     while True:
         temperature = thermistor.temperature
-        temperature_percent = minmax(
+        temperature_percent = utils.minmax(
             (temperature - temperature_min) / temperature_delta_max
         )
         print('temperature_percent: {}'.format(temperature_percent))
         rgb_color = temperature_percent_to_color255(temperature_percent)
-        leds_on = int(temperature_percent * LEDS_COUNT)
-        for led_index in range(LEDS_COUNT):
+        leds_on = int(temperature_percent * constants.LEDS_COUNT)
+        for led_index in range(constants.LEDS_COUNT):
             if led_index <= leds_on:
                 pixels[led_index] = rgb_color
             else:
