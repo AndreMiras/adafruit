@@ -43,13 +43,13 @@ def main():
     loop = 0
     while True:
         loop += 1
-        print('brightness: {}'.format(brightness))
         if button_a.value:
             brightness = less_brightness(brightness)
-            pixels.brightness = brightness
         if button_b.value:
             brightness = more_brightness(brightness)
+        if button_a.value or button_b.value:
             pixels.brightness = brightness
+            print('brightness: {}'.format(brightness))
         if loop % 10 == 0:
             for led_index in range(constants.LEDS_COUNT):
                 color = get_random_color()
