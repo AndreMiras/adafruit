@@ -1,5 +1,4 @@
 """Turns leds on and change color based on the temperature."""
-import random
 import time
 
 import adafruit_thermistor
@@ -10,19 +9,8 @@ import neopixel
 import utils
 
 
-def get_random_color():
-    red, green, blue = (
-        random.randint(0, 255) for _ in range(3)
-    )
-    return red, green, blue
-
-
 def color_1to255(color):
     return int(color * 255)
-
-
-def color_255to1(color):
-    return color / 255.0
 
 
 def temperature_percent_to_color255(temperature_percent):
